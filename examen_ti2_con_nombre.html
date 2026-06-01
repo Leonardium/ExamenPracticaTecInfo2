@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen de práctica · Ciudadanía Digital en la era de la IA</title>
+<style>
+  :root{
+    --uvm-red:#C8102E; --uvm-dark-red:#8B0000;
+    --ink:#1A1A1A; --paper:#FFFFFF; --mist:#F2F2F2; --line:#e2e2e2;
+    --ok:#1a7d3c; --ok-bg:#e6f4ea; --bad:#b3261e; --bad-bg:#fce8e6;
+    --shadow:0 10px 40px rgba(0,0,0,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 100% -10%, rgba(200,16,46,.06), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(200,16,46,.05), transparent 55%),
+      var(--mist);
+    color:var(--ink); min-height:100vh; display:flex;
+    align-items:center; justify-content:center; padding:24px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    width:100%; max-width:1100px; background:var(--paper);
+    border-radius:22px; box-shadow:var(--shadow); overflow:hidden;
+    border:1px solid var(--line);
+  }
+  header{
+    background:var(--uvm-red); color:#fff; padding:22px 36px;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+  }
+  .brand{display:flex;align-items:center;gap:16px}
+  .brand .mark{
+    width:52px;height:52px;border-radius:12px; background:#fff;color:var(--uvm-red);
+    display:grid;place-items:center; font-weight:800;font-size:24px;letter-spacing:-1px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+  }
+  .brand h1{font-size:20px;font-weight:700;line-height:1.2}
+  .brand p{font-size:13px;opacity:.9;font-weight:400;margin-top:2px}
+  .progress-wrap{flex:1;max-width:340px}
+  .progress-label{font-size:13px;opacity:.92;margin-bottom:7px;display:flex;justify-content:space-between}
+  .progress-track{height:9px;background:rgba(255,255,255,.28);border-radius:99px;overflow:hidden}
+  .progress-fill{height:100%;width:0;background:#fff;border-radius:99px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+  main{padding:44px 56px 36px}
+
+  .start{text-align:center;padding:30px 10px 50px}
+  .start .badge{
+    display:inline-block;background:var(--mist);color:var(--uvm-dark-red);
+    font-weight:700;font-size:14px;padding:8px 18px;border-radius:99px;
+    letter-spacing:.5px;text-transform:uppercase;margin-bottom:26px;
+  }
+  .start h2{font-size:42px;font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:18px}
+  .start h2 span{color:var(--uvm-red)}
+  .start .lead{font-size:19px;color:#555;max-width:640px;margin:0 auto 36px;line-height:1.6}
+  .facts{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
+  .fact{background:var(--mist);border-radius:16px;padding:22px 30px;min-width:150px;border:1px solid var(--line)}
+  .fact .n{font-size:34px;font-weight:800;color:var(--uvm-red);line-height:1}
+  .fact .l{font-size:14px;color:#666;margin-top:6px;font-weight:600}
+  .opts-count{margin-bottom:36px}
+  .opts-count label{font-size:15px;color:#666;font-weight:600;margin-right:12px}
+  .opts-count select{
+    font-family:inherit;font-size:16px;font-weight:700;color:var(--ink);
+    padding:10px 16px;border-radius:10px;border:2px solid var(--line);background:#fff;cursor:pointer;
+  }
+  .opts-count select:focus{outline:none;border-color:var(--uvm-red)}
+
+  .btn{cursor:pointer;border:none;font-family:inherit;font-weight:700;
+    border-radius:14px;transition:transform .12s ease, box-shadow .2s ease, background .2s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--uvm-red);color:#fff;font-size:20px;padding:18px 48px;
+    box-shadow:0 8px 22px rgba(200,16,46,.32)}
+  .btn-primary:hover{background:var(--uvm-dark-red);box-shadow:0 10px 28px rgba(200,16,46,.40)}
+  .btn-ghost{background:var(--mist);color:var(--ink);font-size:17px;padding:15px 32px;border:1px solid var(--line)}
+  .btn-ghost:hover{background:#e8e8e8}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+  .q-block{animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .q-meta{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+  .q-num{background:var(--uvm-red);color:#fff;font-weight:800;font-size:16px;
+    padding:6px 16px;border-radius:99px;letter-spacing:.5px}
+  .q-topic{background:var(--mist);color:var(--uvm-dark-red);font-weight:700;font-size:14px;
+    padding:6px 16px;border-radius:99px;border:1px solid var(--line)}
+  .q-text{font-size:30px;font-weight:700;line-height:1.32;margin-bottom:32px;letter-spacing:-.4px}
+
+  .options{display:grid;gap:14px}
+  .option{
+    display:flex;align-items:center;gap:18px; background:var(--paper);border:2.5px solid var(--line);
+    border-radius:16px;padding:20px 24px;cursor:pointer; font-size:21px;line-height:1.4;
+    text-align:left;width:100%; font-family:inherit;color:var(--ink);
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .option:hover:not(.locked){border-color:var(--uvm-red);background:#fff7f8;transform:translateX(4px)}
+  .option .key{
+    flex-shrink:0;width:42px;height:42px;border-radius:11px; background:var(--mist);color:var(--uvm-dark-red);
+    display:grid;place-items:center;font-weight:800;font-size:20px; transition:all .15s ease;
+  }
+  .option:hover:not(.locked) .key{background:var(--uvm-red);color:#fff}
+  .option.locked{cursor:default}
+  .option.correct{border-color:var(--ok);background:var(--ok-bg)}
+  .option.correct .key{background:var(--ok);color:#fff}
+  .option.wrong{border-color:var(--bad);background:var(--bad-bg)}
+  .option.wrong .key{background:var(--bad);color:#fff}
+  .option .verdict{margin-left:auto;font-size:24px;font-weight:800;flex-shrink:0}
+  .option.correct .verdict{color:var(--ok)}
+  .option.wrong .verdict{color:var(--bad)}
+
+  .explain{
+    margin-top:24px;background:var(--mist);border-left:6px solid var(--uvm-red);
+    border-radius:0 14px 14px 0;padding:20px 26px;font-size:18px;line-height:1.55;animation:fade .3s ease;
+  }
+  .explain b{color:var(--uvm-dark-red)}
+
+  nav{display:flex;justify-content:space-between;align-items:center;
+    margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
+  .score-pill{font-size:17px;font-weight:700;color:#555}
+  .score-pill b{color:var(--uvm-red);font-size:20px}
+
+  .results{text-align:center;padding:24px 10px 40px;animation:fade .4s ease}
+  .ring-wrap{position:relative;width:230px;height:230px;margin:0 auto 28px}
+  .ring-wrap svg{transform:rotate(-90deg)}
+  .ring-bg{fill:none;stroke:var(--mist);stroke-width:18}
+  .ring-fg{fill:none;stroke:var(--uvm-red);stroke-width:18;stroke-linecap:round;
+    transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
+  .ring-num{position:absolute;inset:0;display:grid;place-items:center}
+  .ring-num .pct{font-size:62px;font-weight:800;color:var(--ink);line-height:1}
+  .ring-num .frac{font-size:18px;color:#777;font-weight:600;margin-top:4px}
+  .results h2{font-size:36px;font-weight:800;margin-bottom:10px;letter-spacing:-.5px}
+  .results .verdict-msg{font-size:20px;color:#555;max-width:540px;margin:0 auto 34px;line-height:1.5}
+  .results-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:14px;margin:34px auto 0;max-width:760px;text-align:left}
+  .bd-item{background:var(--mist);border-radius:14px;padding:16px 20px;border:1px solid var(--line)}
+  .bd-item .t{font-size:14px;color:#666;font-weight:600;margin-bottom:6px}
+  .bd-item .v{font-size:18px;font-weight:800}
+  .bd-item .v.good{color:var(--ok)} .bd-item .v.mid{color:#c77800} .bd-item .v.low{color:var(--bad)}
+
+  /* campo de nombre */
+  .name-field{max-width:440px;margin:0 auto 22px;text-align:left}
+  .name-field label{display:block;font-size:15px;color:#555;font-weight:600;margin-bottom:8px;text-align:center}
+  .name-field input{
+    width:100%;font-family:inherit;font-size:19px;font-weight:600;color:var(--ink);
+    padding:15px 20px;border-radius:12px;border:2.5px solid var(--line);background:#fff;text-align:center;
+    transition:border-color .15s ease;
+  }
+  .name-field input:focus{outline:none;border-color:var(--uvm-red)}
+  .name-error{color:var(--bad);font-size:14px;font-weight:600;margin-top:8px;text-align:center;display:none}
+  .name-error.show{display:block}
+
+  /* nombre en encabezado */
+  .student-tag{
+    background:rgba(255,255,255,.2);color:#fff;font-weight:700;font-size:14px;
+    padding:7px 16px;border-radius:99px;white-space:nowrap;
+  }
+
+  /* resumen final para enviar */
+  .submit-card{
+    margin:34px auto 0;max-width:620px;background:var(--mist);
+    border:2px dashed var(--uvm-red);border-radius:16px;padding:24px 28px;text-align:left;
+  }
+  .submit-card h3{font-size:17px;color:var(--uvm-dark-red);margin-bottom:6px}
+  .submit-card p{font-size:14px;color:#666;margin-bottom:16px;line-height:1.5}
+  .summary-box{
+    background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;
+    font-family:'Courier New',monospace;font-size:14px;line-height:1.7;color:var(--ink);
+    white-space:pre-wrap;margin-bottom:16px;
+  }
+  .submit-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .btn-copy{background:var(--uvm-red);color:#fff;font-size:15px;padding:13px 24px}
+  .btn-copy:hover{background:var(--uvm-dark-red)}
+  .btn-download{background:#fff;color:var(--ink);font-size:15px;padding:13px 24px;border:2px solid var(--line)}
+  .btn-download:hover{background:#f7f7f7}
+  .copied-msg{color:var(--ok);font-weight:700;font-size:14px;align-self:center;display:none}
+  .copied-msg.show{display:inline}
+
+  .hidden{display:none}
+  @media (max-width:720px){
+    main{padding:28px 22px}
+    .q-text{font-size:23px} .option{font-size:18px;padding:16px 18px}
+    .start h2{font-size:30px} header{padding:18px 22px;flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="mark">UVM</div>
+      <div>
+        <h1>Ciudadanía Digital en la era de la IA</h1>
+        <p>TI2 · Examen de práctica tipo certificación</p>
+      </div>
+    </div>
+    <div class="progress-wrap hidden" id="progressWrap">
+      <div class="progress-label"><span>Progreso</span><span id="progressTxt">0 / 15</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="student-tag hidden" id="studentTag"></div>
+  </header>
+
+  <main>
+    <section class="start" id="startScreen">
+      <div class="badge">Simulacro de certificación</div>
+      <h2>Pon a prueba tu <span>ciudadanía digital</span></h2>
+      <p class="lead">Banco de 41 preguntas que cubren las 10 lecciones del curso. En cada intento se eligen preguntas al azar y se barajan las opciones, así nunca sale igual dos veces.</p>
+      <div class="facts">
+        <div class="fact"><div class="n">41</div><div class="l">En el banco</div></div>
+        <div class="fact"><div class="n">10</div><div class="l">Lecciones</div></div>
+        <div class="fact"><div class="n">70%</div><div class="l">Para aprobar</div></div>
+      </div>
+      <div class="name-field">
+        <label for="studentName">Escribe tu nombre completo</label>
+        <input type="text" id="studentName" placeholder="Ej. Ana López Martínez" autocomplete="name">
+        <div class="name-error" id="nameError">Por favor escribe tu nombre antes de comenzar.</div>
+      </div>
+      <div class="opts-count">
+        <label for="numSel">Preguntas por intento:</label>
+        <select id="numSel">
+          <option value="10">10</option>
+          <option value="15" selected>15</option>
+          <option value="20">20</option>
+          <option value="41">Todas (41)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="startExam()">Comenzar examen</button>
+    </section>
+
+    <section class="hidden" id="quizScreen">
+      <div class="q-block" id="qBlock"></div>
+      <nav>
+        <span class="score-pill">Aciertos: <b id="liveScore">0</b></span>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Siguiente</button>
+      </nav>
+    </section>
+
+    <section class="hidden results" id="resultScreen">
+      <div class="ring-wrap">
+        <svg width="230" height="230" viewBox="0 0 230 230">
+          <circle class="ring-bg" cx="115" cy="115" r="100"></circle>
+          <circle class="ring-fg" id="ringFg" cx="115" cy="115" r="100"
+            stroke-dasharray="628" stroke-dashoffset="628"></circle>
+        </svg>
+        <div class="ring-num">
+          <div style="text-align:center">
+            <div class="pct" id="finalPct">0%</div>
+            <div class="frac" id="finalFrac">0 de 15</div>
+          </div>
+        </div>
+      </div>
+      <h2 id="resultTitle">Resultado</h2>
+      <p class="verdict-msg" id="resultMsg"></p>
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="restart()">Nuevo intento</button>
+        <button class="btn btn-ghost" onclick="reviewMode()">Revisar respuestas</button>
+      </div>
+      <div class="breakdown" id="breakdown"></div>
+
+      <div class="submit-card" id="submitCard">
+        <h3>📤 Envía tu resultado al profesor</h3>
+        <p>Copia el siguiente resumen y pégalo donde tu profesor te indique (correo, plataforma o chat), o descárgalo como archivo de texto.</p>
+        <div class="summary-box" id="summaryBox"></div>
+        <div class="submit-actions">
+          <button class="btn btn-copy" onclick="copySummary()">Copiar resumen</button>
+          <button class="btn btn-download" onclick="downloadSummary()">Descargar (.txt)</button>
+          <span class="copied-msg" id="copiedMsg">✓ ¡Copiado!</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   BANCO DE 40 PREGUNTAS
+   "answer" = índice de la opción correcta en el array original.
+   Las opciones se barajan en ejecución, por eso la letra A/B/C/D
+   cambia en cada intento.
+   ============================================================ */
+const BANK = [
+  { lesson:1, topic:"L1 · Ciudadanía digital",
+    q:"Según la ISTE (2023), ¿qué define mejor a la ciudadanía digital?",
+    options:[
+      "Un conjunto de habilidades para acceder, evaluar, crear y compartir información de manera crítica, ética y eficaz",
+      "El simple hecho de tener acceso a Internet y un dispositivo electrónico",
+      "La cantidad de seguidores que una persona acumula en redes sociales",
+      "El dominio técnico de la programación y el hardware"],
+    answer:0,
+    explain:"La ISTE describe la ciudadanía digital como habilidades para participar de forma <b>crítica, ética y eficaz</b>; no se reduce al acceso a la tecnología." },
+  { lesson:1, topic:"L1 · Pilares",
+    q:"La ciudadanía digital responsable se sostiene sobre tres elementos clave. ¿Cuáles son?",
+    options:[
+      "Velocidad, conectividad y almacenamiento",
+      "Hardware, software y redes",
+      "Seguridad, ética y participación",
+      "Likes, comentarios y compartidos"],
+    answer:2,
+    explain:"Los tres pilares son <b>seguridad</b> (proteger datos), <b>ética</b> (no plagiar, evaluar información) y <b>participación</b> (contribuir de forma activa y positiva)." },
+  { lesson:1, topic:"L1 · Conceptos",
+    q:"¿Cuál es la diferencia entre 'ciudadanía digital' y 'cultura digital'?",
+    options:[
+      "Son sinónimos exactos y se usan indistintamente",
+      "La cultura digital solo aplica a artistas y la ciudadanía a estudiantes",
+      "La ciudadanía digital es un concepto técnico y la cultura digital es ilegal",
+      "La ciudadanía digital es el uso responsable y ético; la cultura digital abarca prácticas, valores y costumbres del entorno digital"],
+    answer:3,
+    explain:"La <b>ciudadanía digital</b> se centra en actuar éticamente en línea; la <b>cultura digital</b> es más amplia: prácticas, valores y costumbres compartidas." },
+  { lesson:1, topic:"L1 · Estándares ISTE",
+    q:"Los estándares ISTE para estudiantes buscan principalmente:",
+    options:[
+      "Promover el uso responsable y ético de la tecnología en la educación",
+      "Obligar a comprar dispositivos de una sola marca",
+      "Medir la velocidad de escritura en el teclado",
+      "Clasificar a los estudiantes por su número de dispositivos"],
+    answer:0,
+    explain:"Los <b>estándares ISTE</b> orientan el uso responsable, ético y efectivo de la tecnología para el aprendizaje." },
+  { lesson:1, topic:"L1 · Ética e IA",
+    q:"Al valorar las implicaciones éticas del uso de la IA, una persona ciudadana digital responsable debe:",
+    options:[
+      "Aceptar cualquier resultado de la IA sin cuestionarlo",
+      "Identificar los posibles riesgos y desafíos asociados con la IA",
+      "Evitar por completo cualquier herramienta de IA",
+      "Usar la IA solo para tareas de entretenimiento"],
+    answer:1,
+    explain:"Parte de la ciudadanía digital es <b>identificar riesgos y desafíos</b> de la IA, ni rechazarla ni aceptarla ciegamente." },
+  { lesson:2, topic:"L2 · Seguridad",
+    q:"El 'phishing' es una técnica de ataque que consiste en:",
+    options:[
+      "Sobrecargar un servidor con peticiones hasta que falle",
+      "Cifrar los archivos de la víctima y pedir un rescate",
+      "Engañar a la persona para que revele información sensible haciéndose pasar por una fuente confiable",
+      "Rastrear la ubicación física de un dispositivo por GPS"],
+    answer:2,
+    explain:"El <b>phishing</b> es ingeniería social: el atacante se hace pasar por una entidad confiable para obtener contraseñas o datos." },
+  { lesson:2, topic:"L2 · Malware",
+    q:"¿Cuál de las siguientes opciones agrupa correctamente tipos de malware?",
+    options:[
+      "Cookies, caché y favoritos",
+      "Virus, troyanos, ransomware y spyware",
+      "Firewall, antivirus y VPN",
+      "HTML, CSS y JavaScript"],
+    answer:1,
+    explain:"El <b>malware</b> incluye virus, troyanos, ransomware y spyware. Firewall, antivirus y VPN son herramientas de protección." },
+  { lesson:2, topic:"L2 · Ransomware",
+    q:"En un ataque de ransomware, ¿qué buscan principalmente los delincuentes?",
+    options:[
+      "Mejorar el rendimiento del equipo de la víctima",
+      "Hacer respaldos automáticos de archivos importantes",
+      "Aumentar la velocidad de la conexión",
+      "Secuestrar o cifrar los datos y exigir un rescate para liberarlos"],
+    answer:3,
+    explain:"El <b>ransomware</b> cifra los datos y exige un rescate. Es uno de los ataques más costosos para empresas y gobiernos." },
+  { lesson:2, topic:"L2 · Huella digital",
+    q:"Tu 'huella digital' se refiere a:",
+    options:[
+      "El rastro único de datos que dejas en línea con tu actividad",
+      "El identificador biométrico de tu dedo para desbloquear el teléfono",
+      "El número de serie físico de tu computadora",
+      "La marca de agua de las fotos que tomas"],
+    answer:0,
+    explain:"La <b>huella digital</b> es el rastro de datos de tu actividad en línea. Mal usada, permite robo de identidad, fraude o discriminación." },
+  { lesson:2, topic:"L2 · Estadística",
+    q:"Según Kaspersky (2023), ¿cuál fue la causa principal de las brechas de seguridad en empresas?",
+    options:[
+      "Fallas en el hardware de los servidores",
+      "Cortes de energía eléctrica",
+      "Errores humanos",
+      "Software desactualizado del fabricante"],
+    answer:2,
+    explain:"El 64% de los incidentes se originó por <b>errores humanos</b>. Capacitar a las personas es tan importante como la tecnología." },
+  { lesson:2, topic:"L2 · Contraseñas",
+    q:"¿Cuál de estos hábitos COMPROMETE tu seguridad digital?",
+    options:[
+      "Activar la verificación en dos pasos",
+      "Usar la misma contraseña para múltiples cuentas importantes",
+      "Cerrar sesión en equipos compartidos",
+      "Usar contraseñas largas y únicas"],
+    answer:1,
+    explain:"<b>Reutilizar contraseñas</b>, usar claves débiles o dejar sesiones abiertas son comportamientos de riesgo que comprometen tu seguridad y la de tu red." },
+  { lesson:3, topic:"L3 · La nube",
+    q:"¿Qué es el almacenamiento en la nube?",
+    options:[
+      "Guardar archivos únicamente en el disco duro local",
+      "Una carpeta oculta dentro del sistema operativo",
+      "Un respaldo que solo funciona sin conexión a Internet",
+      "Almacenar datos en servidores remotos accesibles por Internet desde cualquier dispositivo"],
+    answer:3,
+    explain:"La <b>nube</b> guarda información en servidores remotos accesibles vía Internet: acceso multi-dispositivo, colaboración y respaldo." },
+  { lesson:3, topic:"L3 · Respaldos",
+    q:"¿Cuál es la principal ventaja de hacer respaldos (backups) en la nube?",
+    options:[
+      "Hace que el equipo funcione más rápido permanentemente",
+      "Permite recuperar tus datos si pierdes, dañas o te roban el dispositivo",
+      "Elimina automáticamente todos los virus",
+      "Garantiza que nadie más podrá ver jamás tu contenido"],
+    answer:1,
+    explain:"El beneficio del <b>respaldo</b> es la recuperación ante pérdida, daño o robo. No sustituye otras medidas de seguridad." },
+  { lesson:3, topic:"L3 · Sincronización",
+    q:"La 'sincronización' de archivos en la nube permite que:",
+    options:[
+      "Los archivos se borren cada vez que apagas el equipo",
+      "Solo se pueda abrir un archivo desde un único dispositivo",
+      "Los cambios hechos en un dispositivo se reflejen automáticamente en los demás",
+      "Los archivos se conviertan en formato de imagen"],
+    answer:2,
+    explain:"La <b>sincronización</b> mantiene tus archivos actualizados en todos tus dispositivos automáticamente." },
+  { lesson:3, topic:"L3 · Privacidad",
+    q:"Antes de subir información sensible a un servicio en la nube, lo más prudente es:",
+    options:[
+      "Revisar la configuración de privacidad y los permisos de acceso",
+      "Compartir el enlace públicamente para tener un respaldo extra",
+      "Desactivar la contraseña para acceder más rápido",
+      "Subir todo sin clasificar para ahorrar tiempo"],
+    answer:0,
+    explain:"Revisar la <b>privacidad y los permisos</b> es clave: no todo debe ser público y conviene controlar quién accede a tu información." },
+  { lesson:4, topic:"L4 · Toma de decisiones",
+    q:"¿Cómo define el libro la habilidad de toma de decisiones?",
+    options:[
+      "Elegir siempre la primera opción para ahorrar tiempo",
+      "Dejar que otra persona decida por ti",
+      "Decidir al azar cuando hay duda",
+      "Un proceso sistemático de elección entre alternativas con base en criterios e información disponible"],
+    answer:3,
+    explain:"Es un <b>proceso sistemático</b> de elección entre alternativas según criterios e información. Se vincula al pensamiento crítico, la cooperación y la negociación." },
+  { lesson:4, topic:"L4 · Pensamiento computacional",
+    q:"En el pensamiento computacional, ¿qué es la 'descomposición'?",
+    options:[
+      "Dividir un problema complejo en partes más pequeñas y manejables",
+      "Borrar partes innecesarias hasta que el problema desaparezca",
+      "Repetir la misma instrucción muchas veces",
+      "Convertir un problema en una imagen"],
+    answer:0,
+    explain:"La <b>descomposición</b> divide un problema grande en subproblemas manejables; es una estrategia central del pensamiento computacional." },
+  { lesson:4, topic:"L4 · Patrones",
+    q:"El 'reconocimiento de patrones' en el pensamiento computacional consiste en:",
+    options:[
+      "Memorizar fórmulas matemáticas de memoria",
+      "Identificar similitudes o regularidades entre problemas o datos",
+      "Dibujar figuras geométricas",
+      "Ordenar archivos alfabéticamente"],
+    answer:1,
+    explain:"El <b>reconocimiento de patrones</b> busca similitudes y regularidades para reutilizar soluciones y predecir comportamientos." },
+  { lesson:4, topic:"L4 · Algoritmo",
+    q:"Un 'algoritmo' es:",
+    options:[
+      "Un tipo de virus informático",
+      "Una red social de programadores",
+      "Una secuencia ordenada de pasos para resolver un problema o realizar una tarea",
+      "Un dispositivo de almacenamiento"],
+    answer:2,
+    explain:"Un <b>algoritmo</b> es una secuencia ordenada y finita de pasos para resolver un problema. Es la base de la programación." },
+  { lesson:5, topic:"L5 · Comunicación digital",
+    q:"Al elegir una herramienta de comunicación digital para un equipo, ¿qué criterio es más importante?",
+    options:[
+      "Usar siempre la app más popular sin importar el objetivo",
+      "Escoger la de colores más atractivos",
+      "Elegir la que más datos móviles consuma",
+      "Seleccionarla según el propósito, la audiencia y el tipo de mensaje"],
+    answer:3,
+    explain:"La elección debe responder al <b>propósito, la audiencia y el mensaje</b>. No es moda, sino efectividad y pertinencia." },
+  { lesson:5, topic:"L5 · Netiqueta",
+    q:"La 'netiqueta' se refiere a:",
+    options:[
+      "Las normas de cortesía y buen comportamiento al comunicarse en entornos digitales",
+      "Un protocolo técnico para conectar dispositivos",
+      "La etiqueta de precio en tiendas en línea",
+      "Un tipo de etiqueta HTML"],
+    answer:0,
+    explain:"La <b>netiqueta</b> son las normas de respeto y cortesía en línea: tratar a los demás como en persona, ser claro, etc." },
+  { lesson:5, topic:"L5 · Colaboración",
+    q:"¿Cuál es un beneficio de las herramientas de productividad y colaboración digital?",
+    options:[
+      "Impiden por completo el trabajo en equipo",
+      "Permiten coordinar tareas y comunicarse eficazmente a distancia",
+      "Solo funcionan si todo el equipo está en la misma sala",
+      "Eliminan la necesidad de planificar"],
+    answer:1,
+    explain:"Permiten <b>coordinar, comunicar y colaborar</b> de forma eficaz incluso a distancia." },
+  { lesson:6, topic:"L6 · Contenido textual e IA",
+    q:"Al usar IA generativa para crear textos, ¿cuál es la práctica más responsable?",
+    options:[
+      "Copiar y entregar la respuesta tal cual, sin revisarla",
+      "Confiar plenamente porque la IA nunca se equivoca",
+      "Verificar la información, revisar las fuentes y editar con criterio propio",
+      "Ocultar siempre que se usó IA aunque pidan transparencia"],
+    answer:2,
+    explain:"La IA es apoyo: el contenido debe <b>verificarse, revisar fuentes y editarse críticamente</b>, pues puede generar imprecisiones." },
+  { lesson:6, topic:"L6 · Alucinaciones",
+    q:"Una 'alucinación' de un modelo de IA generativa ocurre cuando:",
+    options:[
+      "El modelo se apaga por sobrecalentamiento",
+      "El modelo genera información falsa o inventada presentándola como verdadera",
+      "El usuario escribe con errores ortográficos",
+      "La pantalla muestra colores distorsionados"],
+    answer:1,
+    explain:"Una <b>alucinación</b> es cuando la IA produce datos falsos con apariencia de verdad. Por eso hay que verificar siempre." },
+  { lesson:6, topic:"L6 · Integridad académica",
+    q:"Un verificador de similitud marca una frase que coincide con una fuente que nunca consultaste. ¿Qué haces?",
+    options:[
+      "Decidir si integras la cita sugerida o reformulas la frase con tus palabras",
+      "Ignorarlo, ya que siempre se equivoca",
+      "Borrar todo el trabajo y empezar de cero",
+      "Cambiar el idioma para que no lo detecte"],
+    answer:0,
+    explain:"Tú decides: <b>citar correctamente o reformular</b>. La herramienta señala coincidencias, pero el criterio es tuyo." },
+  { lesson:6, topic:"L6 · Prompt",
+    q:"En el contexto de la IA generativa, un 'prompt' es:",
+    options:[
+      "Un error del sistema",
+      "La instrucción o indicación que se le da a la IA para obtener una respuesta",
+      "El nombre del modelo de lenguaje",
+      "Un tipo de archivo de imagen"],
+    answer:1,
+    explain:"El <b>prompt</b> es la indicación que das a la IA. Uno claro y bien estructurado produce mejores resultados." },
+  { lesson:7, topic:"L7 · Hojas de cálculo",
+    q:"Según el libro, ¿cuál es el enfoque más útil al aprender hojas de cálculo?",
+    options:[
+      "Memorizar todas las funciones existentes antes de empezar",
+      "Usar solo la suma porque lo demás es innecesario",
+      "Definir lo que necesitas lograr y aprender las funciones para ese objetivo",
+      "Evitar las fórmulas y escribir los resultados a mano"],
+    answer:2,
+    explain:"No hay que dominar todo: <b>define tu objetivo</b> y aprende las funciones que lo resuelven." },
+  { lesson:7, topic:"L7 · Estructura",
+    q:"En una hoja de cálculo, la intersección de una fila y una columna se llama:",
+    options:[
+      "Tabla dinámica",
+      "Gráfico",
+      "Filtro",
+      "Celda"],
+    answer:3,
+    explain:"La <b>celda</b> es la unidad básica: el cruce de fila y columna, donde se ingresan datos, texto o fórmulas." },
+  { lesson:7, topic:"L7 · Funciones",
+    q:"¿Cuál de las siguientes es una funcionalidad típica de las hojas de cálculo para analizar datos?",
+    options:[
+      "Las tablas dinámicas",
+      "El corrector ortográfico de un procesador de texto",
+      "La edición de video",
+      "La compresión de imágenes"],
+    answer:0,
+    explain:"Las <b>tablas dinámicas</b>, junto con fórmulas, funciones y filtros, son clave para resumir y analizar datos." },
+  { lesson:7, topic:"L7 · Storytelling con datos",
+    q:"¿Para qué sirve el 'storytelling' con datos al presentar resultados?",
+    options:[
+      "Para llenar la presentación con la mayor cantidad de números",
+      "Para ocultar los datos que no convienen",
+      "Para construir una narrativa clara que ayude a convencer y comunicar el significado de los datos",
+      "Para reemplazar por completo los gráficos con texto"],
+    answer:2,
+    explain:"El <b>storytelling con datos</b> da una narrativa que aporta sentido a las cifras y ayuda a persuadir." },
+  { lesson:7, topic:"L7 · Visualización",
+    q:"¿Cuándo es más apropiado usar un gráfico de líneas?",
+    options:[
+      "Para mostrar la evolución de un dato a lo largo del tiempo",
+      "Para mostrar la composición porcentual de un todo",
+      "Para escribir un párrafo de conclusiones",
+      "Para almacenar contraseñas"],
+    answer:0,
+    explain:"El <b>gráfico de líneas</b> es ideal para tendencias y evolución temporal; el de pastel, para proporciones de un todo." },
+  { lesson:8, topic:"L8 · IA y creatividad",
+    q:"Además de su potencial creativo, el libro pide valorar un impacto importante de la IA generativa. ¿Cuál?",
+    options:[
+      "Su efecto en el medio ambiente por el alto consumo de energía y recursos",
+      "Que vuelve más lentas las computadoras antiguas",
+      "Que reduce los colores disponibles en pantalla",
+      "Que elimina la necesidad de usar Internet"],
+    answer:0,
+    explain:"Hay que valorar el <b>impacto ambiental</b>: entrenar y operar modelos de IA consume mucha energía, agua y recursos." },
+  { lesson:8, topic:"L8 · Moodboard",
+    q:"Un 'moodboard' en el proceso creativo es:",
+    options:[
+      "Un tablero visual que reúne referencias, colores e imágenes para inspirar un proyecto",
+      "Una hoja de cálculo de presupuestos",
+      "Un tipo de contraseña visual",
+      "Un antivirus para diseñadores"],
+    answer:0,
+    explain:"El <b>moodboard</b> es un collage de referencias (colores, imágenes, tipografías) que define la dirección estética de un proyecto." },
+  { lesson:8, topic:"L8 · IA generativa",
+    q:"Al usar IA para generar imágenes, una práctica ética recomendada es:",
+    options:[
+      "Atribuirse la autoría de obras de otros artistas",
+      "Reconocer el uso de IA y respetar los derechos de autor de las referencias",
+      "Usar las imágenes sin verificar su origen",
+      "Generar la mayor cantidad posible sin criterio"],
+    answer:1,
+    explain:"Es ético <b>reconocer el uso de IA y respetar los derechos de autor</b>. Transparencia y respeto a la propiedad intelectual." },
+  { lesson:9, topic:"L9 · Design Thinking",
+    q:"El 'Design Thinking' es una metodología que pone en el centro:",
+    options:[
+      "La velocidad de la computadora",
+      "El presupuesto del proyecto",
+      "Al usuario y sus necesidades",
+      "La cantidad de código escrito"],
+    answer:2,
+    explain:"El <b>Design Thinking</b> coloca al <b>usuario</b> en el centro: empatiza con sus necesidades para diseñar soluciones innovadoras." },
+  { lesson:9, topic:"L9 · UX vs UI",
+    q:"¿Cuál es la diferencia entre UX y UI?",
+    options:[
+      "UX es la experiencia general del usuario; UI es la interfaz visual con la que interactúa",
+      "UX y UI son exactamente lo mismo",
+      "UX es para móviles y UI solo para computadoras",
+      "UI es la experiencia y UX es el código del servidor"],
+    answer:0,
+    explain:"La <b>UX</b> abarca toda la vivencia al usar un producto; la <b>UI</b> es la capa visual e interactiva concreta." },
+  { lesson:9, topic:"L9 · Wireframe",
+    q:"Un 'wireframe' en diseño web es:",
+    options:[
+      "El código final de producción del sitio",
+      "Una representación básica de la estructura y disposición de una interfaz",
+      "Un tipo de servidor web",
+      "Una imagen de alta resolución terminada"],
+    answer:1,
+    explain:"El <b>wireframe</b> es un esquema básico que muestra la estructura y disposición de los elementos antes del diseño visual final." },
+  { lesson:9, topic:"L9 · Prototipo",
+    q:"¿Por qué es importante prototipar antes de desarrollar un sitio web?",
+    options:[
+      "Para publicar el sitio sin probarlo",
+      "Para detectar problemas y validar ideas antes de invertir en el desarrollo completo",
+      "Para evitar por completo la opinión del usuario",
+      "Porque es obligatorio por ley"],
+    answer:1,
+    explain:"El <b>prototipado</b> permite probar y validar ideas tempranamente, detectando problemas antes de invertir en el desarrollo final." },
+  { lesson:10, topic:"L10 · HTML",
+    q:"En el desarrollo web, ¿cuál es la función principal de HTML?",
+    options:[
+      "Dar estructura y contenido a una página web",
+      "Aplicar colores y estilos visuales",
+      "Programar la lógica e interactividad",
+      "Almacenar la base de datos"],
+    answer:0,
+    explain:"<b>HTML</b> define la <b>estructura y el contenido</b> (títulos, párrafos, imágenes). El estilo lo da CSS y la interactividad, JavaScript." },
+  { lesson:10, topic:"L10 · CSS",
+    q:"¿Para qué se utiliza CSS en una página web?",
+    options:[
+      "Para conectarse a Internet",
+      "Para dar estilo y presentación visual (colores, tipografía, disposición)",
+      "Para guardar contraseñas",
+      "Para estructurar el contenido principal"],
+    answer:1,
+    explain:"<b>CSS</b> controla la <b>presentación visual</b>: colores, fuentes, espaciado y disposición. Trabaja junto a HTML." },
+  { lesson:10, topic:"L10 · JavaScript",
+    q:"En el trío de tecnologías web, ¿qué aporta JavaScript?",
+    options:[
+      "La estructura del contenido",
+      "Los colores y la tipografía",
+      "La interactividad y el comportamiento dinámico de la página",
+      "El alojamiento del servidor"],
+    answer:2,
+    explain:"<b>JavaScript</b> añade <b>interactividad y dinamismo</b>: responde a clics, valida formularios, actualiza contenido sin recargar." }
+];
+
+let deck = [], current = 0, score = 0, answered = [], studentName = '', startTime = 0;
+const $ = id => document.getElementById(id);
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function buildDeck(n){
+  const picked = shuffle(BANK).slice(0, n);
+  return picked.map(Q=>{
+    const order = shuffle(Q.options.map((_,i)=>i));
+    return { topic:Q.topic, lesson:Q.lesson, q:Q.q,
+             options:order.map(i=>Q.options[i]),
+             answer:order.indexOf(Q.answer), explain:Q.explain };
+  });
+}
+function startExam(){
+  const nameInput = $('studentName');
+  const name = nameInput.value.trim();
+  if(name.length < 3){
+    $('nameError').classList.add('show');
+    nameInput.focus();
+    return;
+  }
+  $('nameError').classList.remove('show');
+  studentName = name;
+  $('studentTag').textContent = '👤 ' + studentName;
+  $('studentTag').classList.remove('hidden');
+  startTime = Date.now();
+  deck = buildDeck(parseInt($('numSel').value));
+  current=0; score=0; answered=[];
+  $('startScreen').classList.add('hidden');
+  $('resultScreen').classList.add('hidden');
+  $('quizScreen').classList.remove('hidden');
+  $('progressWrap').classList.remove('hidden');
+  renderQuestion();
+}
+function renderQuestion(){
+  const Q=deck[current], chosen=answered[current], has=chosen!==undefined;
+  $('progressFill').style.width=(current/deck.length*100)+'%';
+  $('progressTxt').textContent=(current+1)+' / '+deck.length;
+  $('liveScore').textContent=score;
+  const opts=Q.options.map((opt,i)=>{
+    const key=String.fromCharCode(65+i);
+    let cls='option',verdict='',locked='';
+    if(has){ locked='locked';
+      if(i===Q.answer){cls+=' correct';verdict='<span class="verdict">&#10003;</span>';}
+      else if(i===chosen){cls+=' wrong';verdict='<span class="verdict">&#10007;</span>';}
+    }
+    return `<button class="${cls} ${locked}" ${has?'':'onclick="choose('+i+')"'}>
+      <span class="key">${key}</span><span>${opt}</span>${verdict}</button>`;
+  }).join('');
+  const explainHTML=has?
+    `<div class="explain"><b>${chosen===Q.answer?'¡Correcto! ':'Respuesta correcta: '+String.fromCharCode(65+Q.answer)+'. '}</b>${Q.explain}</div>`:'';
+  $('qBlock').innerHTML=`
+    <div class="q-meta"><span class="q-num">Pregunta ${current+1}</span>
+    <span class="q-topic">${Q.topic}</span></div>
+    <div class="q-text">${Q.q}</div>
+    <div class="options">${opts}</div>${explainHTML}`;
+  const nb=$('nextBtn'); nb.disabled=!has;
+  nb.textContent=(current===deck.length-1)?'Ver resultados':'Siguiente';
+}
+function choose(i){
+  if(answered[current]!==undefined) return;
+  answered[current]=i;
+  if(i===deck[current].answer) score++;
+  renderQuestion();
+}
+function nextQuestion(){ if(current<deck.length-1){current++;renderQuestion();} else showResults(); }
+function showResults(){
+  $('quizScreen').classList.add('hidden');
+  $('progressWrap').classList.add('hidden');
+  $('resultScreen').classList.remove('hidden');
+  const pct=Math.round(score/deck.length*100);
+  $('finalPct').textContent=pct+'%';
+  $('finalFrac').textContent=score+' de '+deck.length;
+  const circ=628;
+  setTimeout(()=>{$('ringFg').style.strokeDashoffset=circ-(circ*pct/100);},150);
+  let title,msg,color;
+  if(pct>=90){title='¡Excelente!';msg='Dominas los conceptos de ciudadanía digital. Estás más que listo para la certificación.';color='var(--ok)';}
+  else if(pct>=70){title='¡Aprobado!';msg='Buen trabajo: superaste el umbral del 70%. Revisa los temas que fallaste para reforzar.';color='var(--uvm-red)';}
+  else if(pct>=50){title='Casi lo logras';msg='Vas por buen camino, pero aún no alcanzas el 70%. Repasa las lecciones y vuelve a intentarlo.';color='#c77800';}
+  else{title='A repasar';msg='Conviene volver al material del curso antes de presentar. ¡Tú puedes mejorar este resultado!';color='var(--bad)';}
+  $('resultTitle').textContent=title;
+  $('resultMsg').textContent=msg;
+  $('ringFg').style.stroke=color;
+  const inBlock=l=>l<=3?'B1':(l<=7?'B2':'B3');
+  const names={B1:'Bloque 1 (L1-L3)',B2:'Bloque 2 (L4-L7)',B3:'Bloque 3 (L8-L10)'};
+  const agg={B1:[0,0],B2:[0,0],B3:[0,0]};
+  deck.forEach((Q,i)=>{const b=inBlock(Q.lesson);agg[b][1]++;if(answered[i]===Q.answer)agg[b][0]++;});
+  let bd='';
+  for(const b of ['B1','B2','B3']){
+    const [c,t]=agg[b]; if(t===0) continue;
+    const p=Math.round(c/t*100); const lvl=p>=70?'good':(p>=50?'mid':'low');
+    bd+=`<div class="bd-item"><div class="t">${names[b]}</div><div class="v ${lvl}">${c}/${t} &middot; ${p}%</div></div>`;
+  }
+  $('breakdown').innerHTML=bd;
+
+  // ----- resumen para enviar -----
+  const elapsed = Math.round((Date.now()-startTime)/1000);
+  const mins = Math.floor(elapsed/60), secs = elapsed%60;
+  const tiempo = mins+'m '+(secs<10?'0':'')+secs+'s';
+  const fecha = new Date().toLocaleString('es-MX',{dateStyle:'long',timeStyle:'short'});
+  // código de verificación simple: dificulta inventar resultados sin hacer el examen
+  let h = 0; const base = studentName+'|'+score+'/'+deck.length;
+  for(let i=0;i<base.length;i++){ h=(h*31 + base.charCodeAt(i))>>>0; }
+  const codigo = h.toString(36).toUpperCase().slice(0,6);
+
+  let detalleBloques = '';
+  for(const b of ['B1','B2','B3']){
+    const [c,t]=agg[b]; if(t===0) continue;
+    detalleBloques += '  • '+names[b]+': '+c+'/'+t+'\n';
+  }
+
+  const resumen =
+`===== RESULTADO · EXAMEN TI2 =====
+Ciudadanía Digital en la era de la IA
+
+Alumno(a): ${studentName}
+Calificación: ${score}/${deck.length}  (${pct}%)
+Estado: ${pct>=70?'APROBADO':'NO APROBADO'}
+
+Desglose por bloque:
+${detalleBloques}Tiempo: ${tiempo}
+Fecha: ${fecha}
+Código de verificación: ${codigo}
+==================================`;
+
+  $('summaryBox').textContent = resumen;
+  window._examSummary = resumen;
+  window._examFileName = 'resultado_TI2_' + studentName.replace(/[^a-zA-Z0-9]+/g,'_') + '.txt';
+}
+
+function copySummary(){
+  const txt = window._examSummary || '';
+  navigator.clipboard.writeText(txt).then(()=>{
+    $('copiedMsg').classList.add('show');
+    setTimeout(()=>$('copiedMsg').classList.remove('show'), 2500);
+  }).catch(()=>{
+    // respaldo si el navegador bloquea clipboard
+    const ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+    $('copiedMsg').classList.add('show');
+    setTimeout(()=>$('copiedMsg').classList.remove('show'), 2500);
+  });
+}
+
+function downloadSummary(){
+  const blob = new Blob([window._examSummary||''], {type:'text/plain;charset=utf-8'});
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(blob),
+    download: window._examFileName || 'resultado_TI2.txt'
+  });
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function restart(){ $('resultScreen').classList.add('hidden'); $('startScreen').classList.remove('hidden'); $('studentTag').classList.add('hidden'); }
+function reviewMode(){
+  current=0;
+  $('resultScreen').classList.add('hidden');
+  $('quizScreen').classList.remove('hidden');
+  $('progressWrap').classList.remove('hidden');
+  renderQuestion();
+}
+document.addEventListener('keydown',e=>{
+  // Si está escribiendo en el campo de nombre, solo Enter inicia
+  if(e.target && e.target.id==='studentName'){
+    if(e.key==='Enter') startExam();
+    return;
+  }
+  if(!$('quizScreen').classList.contains('hidden')){
+    if(['1','2','3','4'].includes(e.key)){
+      const i=parseInt(e.key)-1;
+      if(deck[current]&&i<deck[current].options.length) choose(i);
+    }
+    if((e.key==='Enter'||e.key==='ArrowRight')&&!$('nextBtn').disabled) nextQuestion();
+  } else if(!$('startScreen').classList.contains('hidden')){
+    if(e.key==='Enter') startExam();
+  }
+});
+</script>
+</body>
+</html>
